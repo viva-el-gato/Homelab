@@ -1,0 +1,24 @@
+services: 
+   open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: unless-stopped
+    ports:
+      - "3000:8080"
+    volumes:
+      - /srv/docker/open-webui:/app/backend/data
+    environment:
+      OPENAI_API_BASE_URL: "http://192.168.1.15:4000/v1"
+      #OPENAI_API_BASE_URL: "http://llama-cpp-cuda:8080/v1"
+      #OPENAI_API_BASE_URL: "http://ollama:11434/v1"
+      OPENAI_API_KEY: "none"
+      ENABLE_OPENAI_API: "true"
+      ENABLE_OLLAMA_API: "false"
+      ENABLE_PERSISTENT_CONFIG: "false"
+      ENABLE_TOOLS: "true"
+    networks:
+      - AI_Network
+
+networks:
+  AI_Network:
+    external: true
