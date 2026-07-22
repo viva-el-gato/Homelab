@@ -1,0 +1,21 @@
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:main-stable
+    container_name: litellm
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    #env_file:
+      #- .env
+        
+    volumes:
+      - /srv/docker/litellm/litellm_config.yaml:/app/config.yaml:ro
+     
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+
+    networks:
+      - AI_Network
+
+networks:
+  AI_Network:
+    external: true
