@@ -1,0 +1,32 @@
+services:
+ llama-cpp:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    container_name: llama-cpp-cuda
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - /srv/docker/llama.cpp/models:/models
+      - /srv/docker/llama.cpp/cache:/root/.cache
+      - /srv/docker/llama.cpp/presets:/presets # added for routed mode
+    gpus: all
+    environment:
+      LLAMA_ARG_HOST: "0.0.0.0"
+      LLAMA_ARG_PORT: "8080"
+      LLAMA_ARG_API_KEY: "none"
+      LLAMA_ARG_MODELS_DIR: "/models"    
+      LLAMA_ARG_MODELS_PRESET: "/presets/models.ini"  # Add that models for selection
+      LLAMA_ARG_MODELS_AUTOLOAD: "true"  # Be sure to set the 'default-model' in the ini file
+      LLAMA_ARG_MODELS_MAX: "1"
+      #LLAMA_ARG_JINJA: "1"
+      LLAMA_ARG_CACHE_PROMPT: "1"
+      LLAMA_ARG_PARALLEL: "2" # Limits the systems to two processes in parallel but overcome by continuous batching
+      LLAMA_ARG_CONT_BATCHING: "1"  # Allows the system to start jobs as they are recieved instead of after a job ends. Number of jobs running depends on the parallel setting.
+      
+      
+    networks:
+      - AI_Network
+
+networks:
+  AI_Network:
+    external: true
