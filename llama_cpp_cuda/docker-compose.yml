@@ -8,20 +8,58 @@ services:
     volumes:
       - /srv/docker/llama.cpp/models:/models
       - /srv/docker/llama.cpp/cache:/root/.cache
-      - /srv/docker/llama.cpp/presets:/presets # added for routed mode
+      
     gpus: all
+    
     environment:
       LLAMA_ARG_HOST: "0.0.0.0"
       LLAMA_ARG_PORT: "8080"
       LLAMA_ARG_API_KEY: "none"
-      LLAMA_ARG_MODELS_DIR: "/models"    
-      LLAMA_ARG_MODELS_PRESET: "/presets/models.ini"  # Add that models for selection
-      LLAMA_ARG_MODELS_AUTOLOAD: "true"  # Be sure to set the 'default-model' in the ini file
-      LLAMA_ARG_MODELS_MAX: "1"
+
+      LLAMA_ARG_MODEL: "/models/Qwen3.6-27B-Q4_K_M.gguf"
+      LLAMA_ARG_MMPROJ: "/models/mmproj/Qwen3.6-27B-Q4_K_M_mmproj-F16.gguf"
+
+      # Model loading
+      LLAMA_ARG_N_GPU_LAYERS: "999"
+      LLAMA_ARG_SPLIT_MODE: "layer"
+      LLAMA_ARG_TENSOR_SPLIT: "1,1"
+      
+      # Context and KV cache
+      LLAMA_ARG_CTX_SIZE: "65536"
+      LLAMA_ARG_CACHE_TYPE_K: "q8_0"
+      LLAMA_ARG_CACHE_TYPE_V: "q4_0
+
+      # MTP speculative decoding
+      LLAMA_ARG_SPEC_TYPE: "draft-mtp"
+      LLAMA_ARG_SPEC_DRAFT_N_MAX: "2"
+
+      # CPU
+      LLAMA_ARG_THREADS: "6"
+      LLAMA_ARG_THREADS_BATCH: "12"
+
+      # Prompt processing
+      LLAMA_ARG_BATCH_SIZE: "1024"
+
+      # Performance
+      LLAMA_ARG_MLOCK: "true"
+      LLAMA_ARG_FLASH_ATTN: "true"
+      LLAMA_ARG_CACHE_PROMPT: "true"
+      LLAMA_ARG_CONT_BATCHING: "true"
+      LLAMA_ARG_PARALLEL: "2"
+      LLAMA_ARG_JINJA: "true"
+
+      # Sampling defaults
+      LLAMA_ARG_TEMP: "1.0"
+      LLAMA_ARG_TOP_P: "0.95"
+      LLAMA_ARG_TOP_K: "20"
+      LLAMA_ARG_MIN_P: "0.0"
+      LLAMA_ARG_PRESENCE_PENALTY: "0.0"
+      LLAMA_ARG_REPEAT_PENALTY: "1.0"
+      
       #LLAMA_ARG_JINJA: "1"
-      LLAMA_ARG_CACHE_PROMPT: "1"
-      LLAMA_ARG_PARALLEL: "2" # Limits the systems to two processes in parallel but overcome by continuous batching
-      LLAMA_ARG_CONT_BATCHING: "1"  # Allows the system to start jobs as they are recieved instead of after a job ends. Number of jobs running depends on the parallel setting.
+      #LLAMA_ARG_CACHE_PROMPT: "1"
+      #LLAMA_ARG_PARALLEL: "2" # Limits the systems to two processes in parallel but overcome by continuous batching
+      #LLAMA_ARG_CONT_BATCHING: "1"  # Allows the system to start jobs as they are recieved instead of after a job ends. Number of jobs running depends on the parallel setting.
       
       
     networks:
