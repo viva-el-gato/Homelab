@@ -26,7 +26,7 @@ services:
       # Context and KV cache
       LLAMA_ARG_CTX_SIZE: "65536"
       LLAMA_ARG_CACHE_TYPE_K: "q8_0"
-      LLAMA_ARG_CACHE_TYPE_V: "q4_0
+      LLAMA_ARG_CACHE_TYPE_V: "q4_0"
 
       # MTP speculative decoding
       LLAMA_ARG_SPEC_TYPE: "draft-mtp"
